@@ -14,6 +14,9 @@ const House2Controller = {
 
     const params = req.body;
 
+    if (!params.house || !params.rooms || !params.wc || !params.cellphone)
+      return res.status(500).send({ message: "Campos invalidos" });
+
     house2.house = params.house;
     house2.rooms = params.rooms;
     house2.wc = params.wc;
@@ -98,19 +101,18 @@ const House2Controller = {
   },
 
   //BORRAR POR ID
-  deleteHouse2: function(req, res){
-      var houseId = req.params.houseId;
+  deleteHouse2: function (req, res) {
+    var houseId = req.params.houseId;
 
-      House2.findOneAndRemove({ houseId: houseId}, (err, house2Delete) =>{
-            if(err) return res.status(500).send({message:"Error al borrar"});
+    House2.findOneAndRemove({ houseId: houseId }, (err, house2Delete) => {
+      if (err) return res.status(500).send({ message: "Error al borrar" });
 
-            if(!house2Delete) return res.status(404).send({message:"No se encontro"});
+      if (!house2Delete)
+        return res.status(404).send({ message: "No se encontro" });
 
-            return res.status(200).send({ house2Delete });
-      });
-
-  }
-
+      return res.status(200).send({ house2Delete });
+    });
+  },
 };
 
 function structuring(house) {
