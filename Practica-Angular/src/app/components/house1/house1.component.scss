@@ -1,0 +1,87 @@
+/* Importar fuentes custom */
+@font-face {
+  font-family: "yanone";
+  src: url("../../../assets/css/fonts/yanone.ttf");
+}
+
+@font-face {
+  font-family: "finger";
+  src: url("../../../assets/css/fonts/finger.ttf");
+}
+
+@font-face {
+  font-family: "titilium";
+  src: url("../../../assets/css/fonts/titilium.ttf");
+}
+
+#title {
+  color: palevioletred;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.76);
+  font-family: "finger";
+  width: 100%;
+}
+
+.container-1 {
+  overflow: hidden;
+  height: 650px;
+  width: 95%;
+  margin-bottom: 20px;
+  border: 5px solid black;
+  float: left;
+  padding: 10px;
+}
+.box {
+  display: flex;
+}
+#form {
+  font-family: "Helvetica";
+  color: purple;
+  width: auto;
+  margin-right: 70px;
+}
+h3 {
+  font-family: "finger";
+  color: rgb(175, 68, 175);
+}
+
+.dashed1 {
+  border: 4px dashed lightskyblue;
+  padding: 10px;
+  float: left;
+  margin-left: 20px;
+  width: auto;
+}
+#t1 {
+  border: 7px solid yellowgreen;
+  text-align: center;
+}
+tr,
+th,
+td {
+  border: 2px solid rgb(114, 114, 114);
+  font-family: "titilium";
+}
+
+.form_error {
+  font-size: 13px;
+  padding: 3px;
+  background: red;
+  color: white;
+  margin-left: 5px;
+}
+
+#update {
+  display: block;
+  font-size: 13px;
+  padding: 3px;
+  height: 25px;
+}
+
+.row {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.row .find {
+  margin-top: 10px;
+}

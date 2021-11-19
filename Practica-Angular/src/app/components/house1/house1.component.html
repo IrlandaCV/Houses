@@ -1,0 +1,121 @@
+<div class="container-1" *ngIf="House">
+  <h1 id="title">Formulario</h1>
+  <div class="box">
+    <div>
+      <form #houseForm="ngForm" (ngSubmit)="create(houseForm)">
+        <label for="house">Casa</label> <br />
+        <input
+          type="text"
+          name="house"
+          #house="ngModel"
+          [(ngModel)]="House.house"
+          required
+        />
+        <br />
+        <span class="form_error" *ngIf="house.touched && !house.valid">
+          El campo es obligatorio
+        </span>
+
+        <br />
+
+        <label for="rooms">Recamaras</label> <br />
+        <input
+          type="number"
+          name="rooms"
+          id="rooms"
+          #rooms="ngModel"
+          [(ngModel)]="House.rooms"
+          required
+        />
+        <br />
+        <span class="form_error" *ngIf="rooms.touched && !rooms.valid">
+          El campo es obligatorio
+        </span>
+
+        <br />
+
+        <label for="wc">Baños</label> <br />
+        <input
+          type="number"
+          name="wc"
+          id="wc"
+          #wc="ngModel"
+          [(ngModel)]="House.wc"
+          required
+        />
+        <br />
+        <span class="form_error" *ngIf="wc.touched && !wc.valid">
+          El campo es obligatorio
+        </span>
+
+        <br />
+
+        <label for="cellphone">Telefono</label> <br />
+        <input
+          type="number"
+          name="cellphone"
+          id="cellphone"
+          #cellphone="ngModel"
+          [(ngModel)]="House.cellphone"
+          required
+        />
+        <br />
+        <span class="form_error" *ngIf="cellphone.touched && !cellphone.valid">
+          El telefono es obligatorio
+        </span>
+
+        <br />
+
+        <button id="createHouse">Enviar</button>
+      </form>
+
+      <div class="row">
+        <button id="update" (click)="update()">Actualizar</button>
+        <div class="find">
+          <form #findForm="ngForm" (ngSubmit)="findById(findForm)">
+            <input
+              type="number"
+              name="byId"
+              #byId="ngModel"
+              [(ngModel)]="stringById"
+              placeholder="0"
+            />
+            <input id="found" type="submit" value="Encontrar" />
+          </form>
+        </div>
+        <button id="list" (click)="findAll()">Listar</button>
+      </div>
+    </div>
+
+    <div class="dashed1">
+      <h3>Informacion de Casas</h3>
+      <hr />
+      <table id="t1">
+        <tr>
+          <th width="250px" height="30px">Id</th>
+          <th width="90px" height="30px">HouseId</th>
+          <th width="120px" height="30px">Casa</th>
+          <th width="110" height="30px">Recamaras</th>
+          <th width="110px" height="30px">Baños</th>
+          <th width="150px" height="30px">Telefono</th>
+          <th width="220px" height="30px">Acciones</th>
+        </tr>
+        <tbody id="tabla registros">
+          <tr *ngFor="let home of Houses">
+            <td>{{ home._id }}</td>
+            <td>{{ home.houseId }}</td>
+            <td>{{ home.house }}</td>
+            <td>{{ home.rooms }}</td>
+            <td>{{ home.wc }}</td>
+            <td>{{ home.cellphone }}</td>
+            <td>
+              <button (click)="get(home)">Editar</button>
+              <button (click)="delete(home)">Eliminar</button>
+              <button (click)="transfer($event, home)">Transferir</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
