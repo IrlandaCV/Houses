@@ -6,7 +6,7 @@ import {
   Input,
   OnChanges,
 } from '@angular/core';
-import { table1 } from '../../db/table1.db';
+
 import { House } from '../../models/house';
 import { HouseService } from '../../services/house1.service';
 
@@ -34,7 +34,7 @@ export class House1Component implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.newHouse != undefined && this.newHouse != null) {
-      table1.push(this.newHouse);
+      this.createinTransfer(this.newHouse);
       this.showData();
     }
   }
@@ -50,6 +50,22 @@ export class House1Component implements OnInit, OnChanges {
   }
 
   /* CREAR UNO NUEVO */
+
+  createinTransfer(house: House) {
+    this._houseService.saveHouse(house).subscribe(
+      (response) => {
+        if (response) {
+          this.showData();
+        } else {
+          alert('Error al guardar');
+        }
+      },
+      (error) => {
+        console.log(<any>error);
+        alert('Campos invalidos');
+      }
+    );
+  }
 
   create(form: any) {
     this._houseService.saveHouse(this.House).subscribe(

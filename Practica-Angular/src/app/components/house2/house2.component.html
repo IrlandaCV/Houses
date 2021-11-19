@@ -109,8 +109,8 @@
             <td>{{ home.cellphone }}</td>
             <td>
               <button (click)="get(home)">Editar</button>
-              <button (click)="delete(home._id)">Eliminar</button>
-              <button (click)="transfer(home)">Transferir</button>
+              <button (click)="delete(home)">Eliminar</button>
+              <button (click)="transfer($event, home)">Transferir</button>
             </td>
           </tr>
         </tbody>

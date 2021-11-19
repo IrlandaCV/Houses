@@ -8,12 +8,14 @@ import {
 } from '@angular/core';
 import { table2 } from '../../db/table2.db';
 import { House } from '../../models/house';
-import * as uuid from 'uuid';
+
+import { HouseService2 } from '../../services/house2.service';
 
 @Component({
   selector: 'house2',
   templateUrl: './house2.component.html',
   styleUrls: ['./house2.component.scss'],
+  providers: [HouseService2],
 })
 export class House2Component implements OnInit, OnChanges {
   @Output() house2Transfered = new EventEmitter();
@@ -23,58 +25,64 @@ export class House2Component implements OnInit, OnChanges {
   public Houses: House[];
   public stringById: string;
 
-  constructor() {
+  constructor(private _houseService: HouseService2) {
     this.House = new House('', 0, '', 0, 0, 0);
     this.Houses = table2;
     this.stringById = '';
+
+    this.showData();
   }
 
   ngOnChanges() {
     if (this.newHouse != null && this.newHouse != undefined) {
-      table2.push(this.newHouse);
-      this.showData(table2);
+     this.createinTransfer(this.newHouse)
+      this.showData();
     }
   }
 
   ngOnInit(): void {}
 
-  showData(array: House[]): void {
-    this.Houses = array;
+  showData(): void {
+    this._houseService
+      .getHouses2()
+      .subscribe(({ houses2 }: { houses2: House[] }) => {
+        this.Houses = houses2;
+      });
   }
 
   /* CREAR UNO NUEVO */
-  create(form: any, formValidate = true) {
-    let houseId = 1;
 
-    table2.map((data) => {
-      houseId = data.houseId + 1;
-    });
+  createinTransfer(house: House) {
+    this._houseService.saveHouse2(house).subscribe(
+      (response) => {
+        if (response) {
+          this.showData();
+        } else {
+          alert('Error al guardar');
+        }
+      },
+      (error) => {
+        console.log(<any>error);
+        alert('Campos invalidos');
+      }
+    );
+  }
 
-    this.House._id = uuid.v4();
-
-    this.House.houseId = houseId;
-
-    if (
-      !this.House._id ||
-      !this.House.cellphone ||
-      !this.House.house ||
-      !this.House.houseId ||
-      !this.House.rooms ||
-      !this.House.wc
-    ) {
-      alert('Campos invalidos');
-      return;
-    }
-
-    table2.push(this.House);
-
-    this.House = new House('', 0, '', 0, 0, 0);
-
-    this.showData(table2);
-
-    if (formValidate) {
-      form.reset();
-    }
+  create(form: any) {
+    this._houseService.saveHouse2(this.House).subscribe(
+      (response) => {
+        if (response) {
+          this.showData();
+          form.reset();
+        } else {
+          alert('Error al guardar');
+        }
+      },
+      (error) => {
+        console.log(<any>error);
+        alert('Campos invalidos');
+      }
+    );
   }
 
   /* EDITAR */
@@ -84,52 +92,62 @@ export class House2Component implements OnInit, OnChanges {
 
   /* ACTUALIZAR */
   update() {
-    table2.map((data, index) => {
-      if (data._id == this.House._id) {
-        table2[index] = this.House;
+    this._houseService.updateHouse2(this.House).subscribe(
+      (response) => {
+        this.House = new House('', 0, '', 0, 0, 0);
+        this.showData();
+      },
+      (err) => {
+        console.log(err);
+        alert('Error al actualizar el registro');
       }
-    });
-    this.showData(table2);
-
-    this.House = new House('', 0, '', 0, 0, 0);
+    );
   }
 
   /* ELIMINAR */
-  delete(_id: string, validate = true) {
+  delete({houseId}:House, validate = true) {
     if (validate) {
       if (!confirm('Estas seguro de eliminar?')) return;
     }
-    table2.map((data, index) => {
-      if (data._id == _id) {
-        table2.splice(index, 1);
-      }
-    });
-    this.showData(table2);
-  }
 
-  /*ENCONTRAR */
-  findById(form: any) {
-    const house = table2.find(
-      (data) => data.houseId == parseInt(this.stringById)
+    this._houseService.deleteHouse2(houseId).subscribe(
+      (response) => {
+        this.showData();
+      },
+      (err) => {
+        console.log(err);
+        alert('Error al eliminar el registro');
+      }
     );
 
-    if (house) {
-      this.showData([house]);
-    } else {
-      alert('Registro no encontrado');
-    }
+    this.showData();
   }
+    
+ 
+  /*ENCONTRAR */
+  findById(form: any) {
+    this._houseService.getHouse2(parseInt(this.stringById)).subscribe(
+      (response: House) => {
+        this.Houses.splice(0, this.Houses.length);
+        this.Houses.push(response);
+      },
+      (err) => {
+        console.log(err);
+        alert('Error al encontrar la casa');
+      }
+    );
+  }
+
 
   /*LISTAR*/
   findAll() {
-    this.Houses = table2;
+    this.showData();
   }
 
   /* TRANSFERIR */
-  transfer(home: House) {
-    this.House = { ...home };
-    this.delete(home._id, false);
-
-    this.house2Transfered.emit(this.House);
+  transfer(event: any, home: House) {
+    const house2Transfered: House = { ...home };
+    this.delete(home, false);
+    this.house2Transfered.emit(house2Transfered);
   }
 }
